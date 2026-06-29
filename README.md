@@ -38,3 +38,60 @@ Modular code design with a strict separation of concerns.:
 │   ├── silver_pipeline.py         # Parameterized pipeline notebook executing the Silver process
 ├── run_process.py                 # Master Orchestrator managing batch execution via dbutils.notebook.run
 └── Gold Layer.py                  # End-user business aggregation and analytics delivery
+```
+
+## 🚀 Step-by-Step Execution Guide
+
+To successfully run this metadata-driven pipeline, execute the notebooks sequentially according to the following orchestration flow:
+
+### Step 1: Environment Provisioning (`config/ddl.py`)
+
+Run the initialization notebook to establish the baseline data environment.
+
+* **What it does:** It provisions the target schema `workspace.project_pipeline` and sets up the Unity Catalog Volume named `manual_file_project` to serve as the landing zone for incoming raw files.
+
+### Step 2: Meta-Table Initialization & Data Seeding (`config/pipeline_table_config.py`)
+
+Run this notebook to build the control parameters repository.
+
+* **What it does:** It creates the centralized control table `project_pipeline.config_table` and performs an upsert (**`MERGE`**) to inject metadata configurations for your target entities:
+1. `shop_table` (manages the `shop_mock.csv` pipeline configuration)
+2. `fact_sales` (manages the `fact_sales.parquet` pipeline configuration)
+
+
+* **Parameters Captured:** It stores vital operational variables including `file_path`, `schema_detail`, target keys (`primary_keys`), and operational `write_mode`.
+
+### Step 3: Upload Raw Data
+
+Upload your source data files into the designated Unity Catalog Volumes paths defined in your metadata store:
+
+* **Shop Data:** `dbfs:/Volumes/workspace/project_pipeline/manual_file_project/shop_mock.csv`
+* **Sales Data:** `dbfs:/Volumes/workspace/project_pipeline/manual_file_project/fact_sales.parquet`
+
+### Step 4: Core Pipeline (`run_process.py`)
+
+Run this master orchestrator script to trigger batch processing. It relies heavily on parameter passing to dynamically instruct downstream tasks.
+
+* **Inside the Orchestrator:** This controller systematically executes downstream components by passing the `pipeline_name` parameter via `dbutils.notebook.run`:
+**1. Bronze Ingestion Phase:**
+* Runs shop ingestion: `dbutils.notebook.run('.../pipeline/bronze_pipeline', 0, {'pipeline_name': 'shop_table'})`
+* Runs sales ingestion: `dbutils.notebook.run('.../pipeline/bronze_pipeline', 0, {'pipeline_name': 'fact_sales'})`
+* *Behind the Scenes:* The `bronze_pipeline.py` consumes the incoming `pipeline_name` widget, extracts the matching rules from the control metadata table, and instantiates the `BronzeLayer` framework class to ingest raw data into the matching `_bronze` table while appending operational audit flags.
+
+
+**2. Silver Cleansing & Partitioning Phase:**
+* Runs shop validation: `dbutils.notebook.run('.../pipeline/silver_pipeline', 0, {'pipeline_name': 'shop_table'})`
+* Runs sales validation: `dbutils.notebook.run('.../pipeline/silver_pipeline', 0, {'pipeline_name': 'fact_sales'})`
+* *Behind the Scenes:* The `silver_pipeline.py` reads data from the corresponding `_bronze` table, applies custom Data Quality (DQ) criteria using the `SilverFramework` class, and dynamically splits rows into **`table_name_silver` (Cleaned Data)** or **`table_name_bad` (Error Audit Logs)**.
+
+
+### Step 5: Gold Layer Analytics Generation (`Gold Layer.py`)
+
+Execute the final reporting layer notebook to transform your structural components into business-ready intelligence.
+
+* **What it does:** It consumes verified silver structures, filters operational timelines (e.g., `'2025-11-30'`), and performs a `LEFT JOIN` between `fact_sales_silver` and `shop_table_silver` on `shop_id`. It aggregates the underlying metrics to generate an executive-level summary of absolute sales velocity categorized by storefront names (`shop_name`).
+
+---
+
+*Powered by PySpark, Delta Lake, and Databricks Widgets.*
+
