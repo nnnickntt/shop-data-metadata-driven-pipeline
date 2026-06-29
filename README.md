@@ -39,6 +39,19 @@ Modular code design with a strict separation of concerns.:
 ├── run_process.py                 # Master Orchestrator managing batch execution via dbutils.notebook.run
 └── Gold Layer.py                  # End-user business aggregation and analytics delivery
 ```
+## 🛠️ Core Engineering & Technical Features
+
+### 1. Production-Grade Metadata-Driven Design
+* **The Mechanism:** Table schemas, storage paths, and processing constraints are completely decoupled into a centralized control catalog (`project_pipeline.config_table`).
+* **The Value:** Zero hardcoded rules. The exact same generic PySpark engine dynamically adapts and processes entirely different datasets purely via configuration lookup, unlocking infinite pipeline scalability.
+
+### 2. Parameterized Orchestration
+* **The Mechanism:** Operates utilizing localized task injection managed programmatically through `dbutils.notebook.run` parameters.
+* **The Value:** Guarantees strict, predictable layer-by-layer execution sequences while centralizing batch run tracking and avoiding operational memory overhead.
+
+### 3. Encapsulated Data Quality (DQ) Isolation
+* **The Mechanism:** Abstracted within an OOP `SilverFramework` class leveraging high-performance set operations (Left-Anti Joins) instead of costly row-by-row iteration.
+* **The Value:** Instantly intercepts corrupt data and isolates it into an audit-ready `table_name_bad` layer—appending exact failure reason flags (`_is_row_dup`, `_is_key_dup`) while committing compliant records to `table_name_silver`.
 
 ## 🚀 Step-by-Step Execution Guide
 
