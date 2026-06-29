@@ -73,6 +73,7 @@ Upload your source data files into the designated Unity Catalog Volumes paths de
 Run this master orchestrator script to trigger batch processing. It relies heavily on parameter passing to dynamically instruct downstream tasks.
 
 * **Inside the Orchestrator:** This controller systematically executes downstream components by passing the `pipeline_name` parameter via `dbutils.notebook.run`:
+  
 **1. Bronze Ingestion Phase:**
 * Runs shop ingestion: `dbutils.notebook.run('.../pipeline/bronze_pipeline', 0, {'pipeline_name': 'shop_table'})`
 * Runs sales ingestion: `dbutils.notebook.run('.../pipeline/bronze_pipeline', 0, {'pipeline_name': 'fact_sales'})`
