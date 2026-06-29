@@ -1,6 +1,6 @@
 # 🚀 shop-data-metadata-driven
 
-Enterprise-grade, **Metadata-Driven Data Pipeline & Analytics Framework** built on **Databricks** utilizing the full **Medallion Architecture (Bronze, Silver, and Gold Layers)**. 
+An enterprise-grade, **Metadata-Driven Data Pipeline & Analytics Framework** built on **Databricks** utilizing the full **Medallion Architecture (Bronze, Silver, and Gold Layers)**. 
 
 This repository marks a major architectural upgrade from the baseline `shop-data-pipeline-medallion` project. By transitioning to **Object-Oriented Programming (OOP)**, the architecture removes hardcoded ingestion rules, making the system highly reusable and scalable via structured configurations.
 
