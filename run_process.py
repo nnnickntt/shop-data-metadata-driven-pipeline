@@ -7,8 +7,8 @@
 
 # COMMAND ----------
 
-dbutils.notebook.run('/Workspace/Users/nicknicknuttiwut@gmail.com/2_Nick/End To End Project With Table Config (On Github)/pipeline/bronze_pipeline',0,{'pipeline_name':'shop_table'})
-dbutils.notebook.run('/Workspace/Users/nicknicknuttiwut@gmail.com/2_Nick/End To End Project With Table Config (On Github)/pipeline/bronze_pipeline',0,{'pipeline_name':'fact_sales'})
+dbutils.notebook.run('your_bronze_pipeline_full_path',0,{'pipeline_name':'shop_table'})
+dbutils.notebook.run('your_bronze_pipeline_full_path',0,{'pipeline_name':'fact_sales'})
 
 # COMMAND ----------
 
@@ -20,5 +20,5 @@ dbutils.notebook.run('/Workspace/Users/nicknicknuttiwut@gmail.com/2_Nick/End To 
 
 # COMMAND ----------
 
-dbutils.notebook.run('/Workspace/Users/nicknicknuttiwut@gmail.com/2_Nick/End To End Project With Table Config (On Github)/pipeline/silver_pipeline', 0, {'pipeline_name': 'shop_table'})
-dbutils.notebook.run('/Workspace/Users/nicknicknuttiwut@gmail.com/2_Nick/End To End Project With Table Config (On Github)/pipeline/silver_pipeline', 0, {'pipeline_name': 'fact_sales'})
+dbutils.notebook.run('your_silver_pipeline_full_path', 0, {'pipeline_name': 'shop_table'})
+dbutils.notebook.run('your_silver_pipeline_full_path', 0, {'pipeline_name': 'fact_sales'})
