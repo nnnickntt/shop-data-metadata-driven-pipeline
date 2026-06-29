@@ -44,6 +44,7 @@ Modular code design with a strict separation of concerns.:
 ### 1. Production-Grade Metadata-Driven Design
 * **The Mechanism:** Table schemas, storage paths, and processing constraints are completely decoupled into a centralized control catalog (`project_pipeline.config_table`).
 * **The Value:** Zero hardcoded rules. The exact same generic PySpark engine dynamically adapts and processes entirely different datasets purely via configuration lookup, unlocking infinite pipeline scalability.
+* **Scalability:** This framework is designed for **"Zero-Code"**. If a new table needs to be added in the future, **no core pipeline code or code modification is required**. Engineers simply append a new metadata entry in `pipeline_table_config.py`, and the architecture will dynamically ingest, clean, and process the new dataset instantly upon the next run.
 
 ### 2. Parameterized Orchestration
 * **The Mechanism:** Operates utilizing localized task injection managed programmatically through `dbutils.notebook.run` parameters.
