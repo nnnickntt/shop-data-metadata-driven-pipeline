@@ -23,7 +23,7 @@ The pipeline automates data ingestion, standardizes schema validation, and compu
 
 ## 📂 Repository Structure
 
-The codebase is organized into modular components to enforce a clean separation of concerns:
+Modular code design with a strict separation of concerns.:
 
 ```text
 ├── config/
@@ -37,22 +37,4 @@ The codebase is organized into modular components to enforce a clean separation 
 │   ├── bronze_pipeline.py         # Parameterized pipeline notebook executing the Bronze process
 │   ├── silver_pipeline.py         # Parameterized pipeline notebook executing the Silver process
 ├── run_process.py                 # Master Orchestrator managing batch execution via dbutils.notebook.run
-└── Gold Layer.py                  # End-user business aggregation and analytics delivery
----
-## 📂 Repository Structure
-
-The codebase is organized into modular components to enforce a clean separation of concerns:
-
-```text
-├── config/
-│   ├── ddl.py                     # Environment provisioning (Schemas & Unity Catalog Volumes)
-│   ├── lib.py                     # Centralized PySpark library imports and ecosystem dependencies
-│   └── pipeline_table_config.py   # Metadata repository managing schema configurations and keys
-├── framework/
-│   ├── bronze_framework.py        # OOP Blueprint for standardized Bronze layer extraction
-│   └── silver_framework.py        # OOP Blueprint for automated data cleansing & rule enforcement
-├── pipeline/
-│   ├── bronze_pipeline.py         # Parameterized pipeline notebook executing the Bronze process
-│   ├── silver_pipeline.py         # Parameterized pipeline notebook executing the Silver process
-├── run_process.py                 # Master managing batch execution via dbutils.notebook.run
 └── Gold Layer.py                  # End-user business aggregation and analytics delivery
